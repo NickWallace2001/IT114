@@ -4,6 +4,8 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Random;
 import java.util.Scanner;
+import java.time.format.DateTimeFormatter;
+import java.time.LocalDateTime;  
 
 public class NumberGuesserHW {
 	private int level = 1;
@@ -20,6 +22,13 @@ public class NumberGuesserHW {
 	 * @param level (level to use as upper bounds)
 	 * @return number between bounds
 	 */
+	
+	private void currentTime() {
+		   DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd");
+		   LocalDateTime now = LocalDateTime.now();
+		   System.out.println("you made this guess on " + dtf.format(now));
+	}
+	
 	public static int getNumber(int level) {
 		int range = 9 + ((level - 1) * 5);
 		System.out.println("I picked a random number between 1-" + (range + 1) + ", let's see if you can guess.");
@@ -75,6 +84,7 @@ public class NumberGuesserHW {
 				} else if (guess < number) {
 					System.out.println("Higher");
 				}
+				currentTime();
 			}
 		}
 	}
