@@ -5,10 +5,11 @@ import java.io.IOException;
 import java.util.Random;
 import java.util.Scanner;
 
-public class NumberGuesserPart4 {
+public class NumberGuesserHW {
 	private int level = 1;
 	private int strikes = 0;
 	private int maxStrikes = 5;
+	private int remainder = 0;
 	private int number = 0;
 	private boolean isRunning = false;
 	final String saveFile = "numberGuesserSave.txt";
@@ -49,6 +50,7 @@ public class NumberGuesserPart4 {
 	private void processCommands(String message) {
 		if (message.equalsIgnoreCase("quit")) {
 			System.out.println("Tired of playing? No problem, see you next time.");
+			saveLevel();
 			isRunning = false;
 		}
 	}
@@ -66,7 +68,7 @@ public class NumberGuesserPart4 {
 			if (strikes >= maxStrikes) {
 				lose();
 			} else {
-				int remainder = maxStrikes - strikes;
+				remainder = maxStrikes - strikes;
 				System.out.println("You have " + remainder + "/" + maxStrikes + " attempts remaining");
 				if (guess > number) {
 					System.out.println("Lower");
@@ -91,6 +93,12 @@ public class NumberGuesserPart4 {
 	private void saveLevel() {
 		try (FileWriter fw = new FileWriter(saveFile)) {
 			fw.write("" + level);// here we need to convert it to a String to record correctly
+			fw.write("\n");
+			fw.write("" + strikes);
+			fw.write("\n");
+			fw.write("" + remainder);
+			fw.write("\n");
+			fw.write("" + number);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -105,8 +113,14 @@ public class NumberGuesserPart4 {
 		try (Scanner reader = new Scanner(file)) {
 			while (reader.hasNextLine()) {
 				int _level = reader.nextInt();
+				int _strikes = reader.nextInt();
+				int _remainder = reader.nextInt();
+				int _number = reader.nextInt();
 				if (_level > 1) {
 					level = _level;
+					strikes = _strikes;
+					remainder = _remainder;
+					number = _number;
 					break;
 				}
 			}
@@ -127,8 +141,11 @@ public class NumberGuesserPart4 {
 					+ " attempts to guess.");
 			if (loadLevel()) {
 				System.out.println("Successfully loaded level " + level + " let's continue then");
+				System.out.println("You have " + strikes + " strikes out of " + maxStrikes + " strikes");
 			}
-			number = getNumber(level);
+			else {
+				number = getNumber(level);
+			}
 			isRunning = true;
 			while (input.hasNext()) {
 				String message = input.nextLine();
@@ -147,7 +164,7 @@ public class NumberGuesserPart4 {
 	}
 
 	public static void main(String[] args) {
-		NumberGuesserPart4 guesser = new NumberGuesserPart4();
+		NumberGuesserHW guesser = new NumberGuesserHW();
 		guesser.run();
 	}
 }
