@@ -222,16 +222,15 @@ public class Room extends BaseGamePanel implements AutoCloseable {
 		    roomName = comm2[1];
 		    joinRoom(roomName, client);
 		    //wasCommand = true;
-		    break;
 		case FLIP:
 	    	int coinFlip = (int)(Math.random() * 2);
 	    	if (coinFlip == 0) {
 	    		log.log(Level.INFO, "The result is Heads");
-	    		response = "Heads";
+	    		response = "The  result of the coin flip was Heads";
 	    	}
 	    	else {
 	    		log.log(Level.INFO, "The result is Tails");
-	    		response = "Tails";
+	    		response = "The result of the coin flip was Tails";
 	    	}
 			break;
 		}
