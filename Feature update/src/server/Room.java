@@ -233,6 +233,10 @@ public class Room extends BaseGamePanel implements AutoCloseable {
 	    		response = "The result of the coin flip was Tails";
 	    	}
 			break;
+		case "roll":
+			int diceroll = (int)(Math.random() * 6) +1;
+			String strdice = String.valueOf(diceroll);
+			response = "the result of the dice roll is " + strdice;
 		}
 	    }
 	}
