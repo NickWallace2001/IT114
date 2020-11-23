@@ -1,6 +1,9 @@
 package server;
 
 import java.awt.Dimension;
+
+import org.apache.commons.lang3;
+
 import java.awt.Graphics;
 import java.awt.Point;
 import java.util.ArrayList;
@@ -200,7 +203,7 @@ public class Room extends BaseGamePanel implements AutoCloseable {
      */
     private String processCommands(String message, ServerThread client) {
 	//boolean wasCommand = false;
-    String response = message;
+    String response = "";
 	try {
 	    if (message.indexOf(COMMAND_TRIGGER) > -1) {
 		String[] comm = message.split(COMMAND_TRIGGER);
@@ -243,6 +246,7 @@ public class Room extends BaseGamePanel implements AutoCloseable {
 	catch (Exception e) {
 	    e.printStackTrace();
 	}
+	StringUtil.substringBetween();
 	return response;
     }
 
