@@ -265,7 +265,9 @@ public class Room extends BaseGamePanel implements AutoCloseable {
 		String temp = message;
 		while (temp.indexOf("[/r]") > -1) {
 			String s1 = StringUtils.substringBetween(temp, "[r]", "[/r]");
-			temp = temp.replaceAll(s1, "<font color='red'>" + s1 + "</font>");
+			temp = temp.replaceFirst("[r]", "<font color='red'>");
+			temp = temp.replaceFirst("[r]", "</font>");
+			
 		}
 		temp = StringUtils.remove(temp, "[r]");
 		temp = StringUtils.remove(temp, "[/r]");
@@ -287,6 +289,7 @@ public class Room extends BaseGamePanel implements AutoCloseable {
 		}
 		response = mess;
 	}
+	
 	if (response.indexOf("##") > -1) {
 		String[] s1 = response.split("##");
 		String mess = "";
