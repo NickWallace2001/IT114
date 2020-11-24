@@ -1,6 +1,9 @@
 package server;
 
 import java.awt.Dimension;
+
+import org.apache.commons.lang3.StringUtils;
+
 import java.awt.Graphics;
 import java.awt.Point;
 import java.util.ArrayList;
@@ -242,6 +245,78 @@ public class Room extends BaseGamePanel implements AutoCloseable {
 	}
 	catch (Exception e) {
 	    e.printStackTrace();
+	}
+	if (response.indexOf("@@") > -1) {
+		String[] s1 = response.split("@@");
+		String mess = "";
+		mess += s1[0];
+		for (int i = 1; i < s1.length; i++) {
+			if (i % 2 == 0) {
+				mess += s1[i];
+			}
+			else {
+				mess += "<b>" + s1[i] + "</b>";
+			}
+		}
+		response = mess;
+	}
+	/*
+	if (response.contains("[r]")) {
+		String temp = message;
+		while (temp.indexOf("[/r]") > -1) {
+			String s1 = StringUtils.substringBetween(temp, "[r]", "[/r]");
+			temp = temp.replaceFirst("[r]", "<font color='red'>");
+			temp = temp.replaceFirst("[r]", "</font>");
+			
+		}
+		temp = StringUtils.remove(temp, "[r]");
+		temp = StringUtils.remove(temp, "[/r]");
+		response = temp;
+	}
+	*/
+	
+	if (response.indexOf("&&") > -1) {
+		String[] s1 = response.split("&&");
+		String mess = "";
+		mess += s1[0];
+		for (int i = 1; i < s1.length; i++) {
+			if (i % 2 == 0) {
+				mess += s1[i];
+			}
+			else {
+				mess += "<font color='red'>" + s1[i] + "</font>";
+			}
+		}
+		response = mess;
+	}
+	
+	if (response.indexOf("##") > -1) {
+		String[] s1 = response.split("##");
+		String mess = "";
+		mess += s1[0];
+		for (int i = 1; i < s1.length; i++) {
+			if (i % 2 == 0) {
+				mess += s1[i];
+			}
+			else {
+				mess += "<i>" + s1[i] + "</i>";
+			}
+		}
+		response = mess;
+	}
+	if (response.indexOf("%%") > -1) {
+		String[] s1 = response.split("%%");
+		String mess = "";
+		mess += s1[0];
+		for (int i = 1; i < s1.length; i++) {
+			if (i % 2 == 0) {
+				mess += s1[i];
+			}
+			else {
+				mess += "<u>" + s1[i] + "</u>";
+			}
+		}
+		response = mess;
 	}
 	return response;
     }
