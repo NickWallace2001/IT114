@@ -263,21 +263,24 @@ public class Room extends BaseGamePanel implements AutoCloseable {
 			}
 			else {
 				String temp = message;
-				List<String> users = new ArrayList<String>();
-				while (temp.indexOf("@") > -1) {
-					String user = StringUtils.substringBetween("@", " ");
-					users.add(user);
-					temp = temp.replace("@"+user, "");
+				if (temp.indexOf("@") > -1) {
+					List<String> users = new ArrayList<String>();
+					while (temp.indexOf("@") > -1) {
+						String user = StringUtils.substringBetween(temp, "@", " ");
+						users.add(user);
+						temp = temp.replace("@"+user, "");
+					}
+					sendPrivateMessage(client, temp, users);
+					return null;
+					//response = null;
 				}
-				response = temp;
-				sendPrivateMessage(client, response, users);
 			}
 		}
 		catch (Exception e) {
 			e.printStackTrace();
 		}
-		
-		if (response.indexOf("@@") > -1) {
+		String msg = message;
+		if (msg.indexOf("@@") > -1) {
 			String[] s1 = response.split("@@");
 			String mess = "";
 			mess += s1[0];
@@ -289,7 +292,7 @@ public class Room extends BaseGamePanel implements AutoCloseable {
 					mess += "<b>" + s1[i] + "</b>";
 				}
 			}
-			response = mess;
+			msg = mess;
 		}
 		/*
 	if (response.contains("[r]")) {
@@ -306,7 +309,7 @@ public class Room extends BaseGamePanel implements AutoCloseable {
 	}
 		 */
 
-		if (response.indexOf("&&") > -1) {
+		if (msg.indexOf("&&") > -1) {
 			String[] s1 = response.split("&&");
 			String mess = "";
 			mess += s1[0];
@@ -318,10 +321,10 @@ public class Room extends BaseGamePanel implements AutoCloseable {
 					mess += "<font color='red'>" + s1[i] + "</font>";
 				}
 			}
-			response = mess;
+			msg = mess;
 		}
 
-		if (response.indexOf("##") > -1) {
+		if (msg.indexOf("##") > -1) {
 			String[] s1 = response.split("##");
 			String mess = "";
 			mess += s1[0];
@@ -333,9 +336,9 @@ public class Room extends BaseGamePanel implements AutoCloseable {
 					mess += "<i>" + s1[i] + "</i>";
 				}
 			}
-			response = mess;
+			msg = mess;
 		}
-		if (response.indexOf("%%") > -1) {
+		if (msg.indexOf("%%") > -1) {
 			String[] s1 = response.split("%%");
 			String mess = "";
 			mess += s1[0];
@@ -347,9 +350,10 @@ public class Room extends BaseGamePanel implements AutoCloseable {
 					mess += "<u>" + s1[i] + "</u>";
 				}
 			}
-			response = mess;
+			msg = mess;
 		}
-		return response;
+		//response = msg;
+		return msg;
 	}
 
 	protected void sendConnectionStatus(ServerThread client, boolean isConnect, String message) {
@@ -394,11 +398,7 @@ public class Room extends BaseGamePanel implements AutoCloseable {
 	
 	protected void sendPrivateMessage(ServerThread sender, String message, List<String> users) {
 		log.log(Level.INFO, getName() + ": Sending message to " + clients.size() + " clients");
-		String resp = processCommands(message,sender);
-		if(resp == null) {
-			return;
-		}
-		message = resp;
+
 		Iterator<ClientPlayer> iter = clients.iterator();
 		while (iter.hasNext()) {
 			ClientPlayer client = iter.next();
