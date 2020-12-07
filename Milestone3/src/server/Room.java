@@ -215,7 +215,6 @@ public class Room extends BaseGamePanel implements AutoCloseable {
 					command = command.toLowerCase();
 				}
 				String roomName;
-				String clientName;
 				switch (command) {
 				case CREATE_ROOM:
 					roomName = comm2[1];
@@ -242,6 +241,7 @@ public class Room extends BaseGamePanel implements AutoCloseable {
 					String strdice = String.valueOf(diceroll);
 					response = "<b>" + "the result of the dice roll is " + strdice + "</b>";
 				case "mute":
+					String clientName;
 					clientName = comm2[1];
 					if (!client.mutedClients.contains(clientName)) {
 						client.mutedClients.add(clientName);
@@ -249,111 +249,103 @@ public class Room extends BaseGamePanel implements AutoCloseable {
 					}
 					break;
 				case "unmute":
-					clientName = comm2[1];
-					if (client.mutedClients.contains(clientName)) {
-						client.mutedClients.remove(clientName);
-						response = "unmuted " + clientName;
+					String clientName2;
+					clientName2 = comm2[1];
+					if (client.mutedClients.contains(clientName2)) {
+						client.mutedClients.remove(clientName2);
+						response = "unmuted " + clientName2;
 					}
 					break;
-				default:
+				/*default:
 					response = message;
 					break;
+					*/
 
 				}
 			}
 			else {
-				String temp = message;
-				if (temp.indexOf("@") > -1) {
+				response = message;
+				if (response.indexOf("@") > -1) {
 					List<String> users = new ArrayList<String>();
-					while (temp.indexOf("@") > -1) {
-						String user = StringUtils.substringBetween(temp, "@", " ");
+					while (response.indexOf("@") > -1) {
+						String user = StringUtils.substringBetween(response, "@", " ");
 						users.add(user);
-						temp = temp.replace("@"+user, "");
+						response = response.replace("@"+user, "");
 					}
-					sendPrivateMessage(client, temp, users);
+					sendPrivateMessage(client, response, users);
 					return null;
 					//response = null;
 				}
 			}
+			String msg = message;
+			if (msg.indexOf("%%") > -1) {
+				String[] s1 = msg.split("%%");
+				String mess = "";
+				mess += s1[0];
+				for (int i = 1; i < s1.length; i++) {
+					if (i % 2 == 0) {
+						mess += s1[i];
+					}
+					else {
+						mess += "<b>" + s1[i] + "</b>";
+					}
+				}
+				//msg = mess;
+				response =mess;
+			}
+
+			if (msg.indexOf("!!") > -1) {
+				String[] s1 = msg.split("!!");
+				String mess = "";
+				mess += s1[0];
+				for (int i = 1; i < s1.length; i++) {
+					if (i % 2 == 0) {
+						mess += s1[i];
+					}
+					else {
+						mess += "<font color='red'>" + s1[i] + "</font>";
+					}
+				}
+				//msg = mess;
+				response =mess;
+			}
+
+			if (msg.indexOf("##") > -1) {
+				String[] s1 = msg.split("##");
+				String mess = "";
+				mess += s1[0];
+				for (int i = 1; i < s1.length; i++) {
+					if (i % 2 == 0) {
+						mess += s1[i];
+					}
+					else {
+						mess += "<i>" + s1[i] + "</i>";
+					}
+				}
+				//msg = mess;
+				response =mess;
+			}
+			if (msg.indexOf("__") > -1) {
+				String[] s1 = msg.split("__");
+				String mess = "";
+				mess += s1[0];
+				for (int i = 1; i < s1.length; i++) {
+					if (i % 2 == 0) {
+						mess += s1[i];
+					}
+					else {
+						mess += "<u>" + s1[i] + "</u>";
+					}
+				}
+				//msg = mess;
+				response =mess;
+			}
+			//response = msg;
 		}
 		catch (Exception e) {
 			e.printStackTrace();
 		}
-		String msg = message;
-		if (msg.indexOf("@@") > -1) {
-			String[] s1 = response.split("@@");
-			String mess = "";
-			mess += s1[0];
-			for (int i = 1; i < s1.length; i++) {
-				if (i % 2 == 0) {
-					mess += s1[i];
-				}
-				else {
-					mess += "<b>" + s1[i] + "</b>";
-				}
-			}
-			msg = mess;
-		}
-		/*
-	if (response.contains("[r]")) {
-		String temp = message;
-		while (temp.indexOf("[/r]") > -1) {
-			String s1 = StringUtils.substringBetween(temp, "[r]", "[/r]");
-			temp = temp.replaceFirst("[r]", "<font color='red'>");
-			temp = temp.replaceFirst("[r]", "</font>");
-
-		}
-		temp = StringUtils.remove(temp, "[r]");
-		temp = StringUtils.remove(temp, "[/r]");
-		response = temp;
-	}
-		 */
-
-		if (msg.indexOf("&&") > -1) {
-			String[] s1 = response.split("&&");
-			String mess = "";
-			mess += s1[0];
-			for (int i = 1; i < s1.length; i++) {
-				if (i % 2 == 0) {
-					mess += s1[i];
-				}
-				else {
-					mess += "<font color='red'>" + s1[i] + "</font>";
-				}
-			}
-			msg = mess;
-		}
-
-		if (msg.indexOf("##") > -1) {
-			String[] s1 = response.split("##");
-			String mess = "";
-			mess += s1[0];
-			for (int i = 1; i < s1.length; i++) {
-				if (i % 2 == 0) {
-					mess += s1[i];
-				}
-				else {
-					mess += "<i>" + s1[i] + "</i>";
-				}
-			}
-			msg = mess;
-		}
-		if (msg.indexOf("%%") > -1) {
-			String[] s1 = response.split("%%");
-			String mess = "";
-			mess += s1[0];
-			for (int i = 1; i < s1.length; i++) {
-				if (i % 2 == 0) {
-					mess += s1[i];
-				}
-				else {
-					mess += "<u>" + s1[i] + "</u>";
-				}
-			}
-			msg = mess;
-		}
-		//response = msg;
-		return msg;
+		return response;
 	}
 
 	protected void sendConnectionStatus(ServerThread client, boolean isConnect, String message) {
