@@ -270,6 +270,7 @@ public class Room extends BaseGamePanel implements AutoCloseable {
 					while (response.indexOf("@") > -1) {
 						String user = StringUtils.substringBetween(response, "@", " ");
 						users.add(user);
+						users.add(client.getClientName());
 						response = response.replace("@"+user, "");
 					}
 					sendPrivateMessage(client, response, users);
