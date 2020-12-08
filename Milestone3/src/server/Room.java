@@ -215,6 +215,7 @@ public class Room extends BaseGamePanel implements AutoCloseable {
 					command = command.toLowerCase();
 				}
 				String roomName;
+				String clientName;
 				switch (command) {
 				case CREATE_ROOM:
 					roomName = comm2[1];
@@ -241,7 +242,6 @@ public class Room extends BaseGamePanel implements AutoCloseable {
 					String strdice = String.valueOf(diceroll);
 					response = "<b>" + "the result of the dice roll is " + strdice + "</b>";
 				case "mute":
-					String clientName;
 					clientName = comm2[1];
 					if (!client.mutedClients.contains(clientName)) {
 						client.mutedClients.add(clientName);
@@ -249,11 +249,10 @@ public class Room extends BaseGamePanel implements AutoCloseable {
 					}
 					break;
 				case "unmute":
-					String clientName2;
-					clientName2 = comm2[1];
-					if (client.mutedClients.contains(clientName2)) {
-						client.mutedClients.remove(clientName2);
-						response = "unmuted " + clientName2;
+					clientName = comm2[1];
+					if (client.mutedClients.contains(clientName)) {
+						client.mutedClients.remove(clientName);
+						response = "unmuted " + clientName;
 					}
 					break;
 				/*default:
@@ -388,6 +387,7 @@ public class Room extends BaseGamePanel implements AutoCloseable {
 			}
 		}
 	}
+	
 	
 	protected void sendPrivateMessage(ServerThread sender, String message, List<String> users) {
 		log.log(Level.INFO, getName() + ": Sending message to " + clients.size() + " clients");
