@@ -1,0 +1,5 @@
+nick: joined the room Lobby
+john: joined the room Lobby
+nick: hi how are you
+john: im swell, yourself??
+nick: doing pretty dandy
